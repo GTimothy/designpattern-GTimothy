@@ -1,14 +1,17 @@
 package eu.telecomnancy.ui;
 
 import eu.telecomnancy.sensor.ISensor;
+import eu.telecomnancy.sensor.Observer;
 import eu.telecomnancy.sensor.SensorNotActivatedException;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class SensorView extends JPanel {
+
+public class SensorView extends JPanel implements Observer {
     private ISensor sensor;
 
     private JLabel value = new JLabel("N/A °C");
@@ -60,4 +63,12 @@ public class SensorView extends JPanel {
 
         this.add(buttonsPanel, BorderLayout.SOUTH);
     }
+
+	@Override
+	public void update(Double d) {
+		this.value.setText(d+" °C");
+		
+	}
+
+	
 }

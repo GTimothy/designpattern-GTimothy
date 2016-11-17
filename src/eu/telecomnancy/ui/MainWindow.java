@@ -13,7 +13,7 @@ public class MainWindow extends JFrame {
     public MainWindow(ISensor sensor) {
         this.sensor = sensor;
         this.sensorView = new SensorView(this.sensor);
-
+        this.sensor.registerObserver(sensorView);
         this.setLayout(new BorderLayout());
         this.add(this.sensorView, BorderLayout.CENTER);
 
