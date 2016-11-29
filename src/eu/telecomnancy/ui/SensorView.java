@@ -4,14 +4,19 @@ import eu.telecomnancy.sensor.ISensor;
 import eu.telecomnancy.sensor.SensorNotActivatedException;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class SensorView extends JPanel {
-    private ISensor sensor;
+public class SensorView extends JPanel implements ISensorView {
+    
+	private ISensor sensor;
 
-    private JLabel value = new JLabel("N/A °C");
+    private Box centralBox = Box.createHorizontalBox();
+
+    private JLabel value = new JLabel("             N/A °C           ");
+    private Double v=0.0;
     private JButton on = new JButton("On");
     private JButton off = new JButton("Off");
     private JButton update = new JButton("Acquire");
@@ -24,7 +29,12 @@ public class SensorView extends JPanel {
         Font sensorValueFont = new Font("Sans Serif", Font.BOLD, 18);
         value.setFont(sensorValueFont);
 
-        this.add(value, BorderLayout.CENTER);
+
+        centralBox.add(Box.createHorizontalGlue());
+        centralBox.add(value);
+        centralBox.add(Box.createHorizontalGlue());
+        
+        this.add(centralBox, BorderLayout.CENTER);
 
 
         on.addActionListener(new ActionListener() {
@@ -45,7 +55,9 @@ public class SensorView extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    sensor.update();
+                	sensor.update();
+                	v=sensor.getValue();
+                	value.setText(""+ v);
                 } catch (SensorNotActivatedException sensorNotActivatedException) {
                     sensorNotActivatedException.printStackTrace();
                 }
@@ -57,7 +69,34 @@ public class SensorView extends JPanel {
         buttonsPanel.add(update);
         buttonsPanel.add(on);
         buttonsPanel.add(off);
+        on.requestFocus();
+        on.requestFocusInWindow();
+        on.requestFocus(true);
 
         this.add(buttonsPanel, BorderLayout.SOUTH);
     }
+
+	@Override
+	public void update(Double d) {
+		this.value.setText(""+d);
+	}
+
+	@Override
+	public void addComponent(Component c) {
+		centralBox.add(Box.createHorizontalGlue());
+		centralBox.add(c);
+		centralBox.add(Box.createHorizontalGlue());
+
+
+	}
+
+	@Override
+	public JPanel getPanel() {
+		return this;
+	}
+
+	@Override
+	public double getValue(){
+		return v;
+	}
 }
