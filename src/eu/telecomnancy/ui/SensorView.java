@@ -46,6 +46,7 @@ public class SensorView extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 try {
                     sensor.update();
+                    value.setText(""+ sensor.getValue());
                 } catch (SensorNotActivatedException sensorNotActivatedException) {
                     sensorNotActivatedException.printStackTrace();
                 }
